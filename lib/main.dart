@@ -19,19 +19,26 @@ class PadreWidget extends StatefulWidget {
 }
 
 class _PadreWidgetState extends State<PadreWidget> {
-  String dato = "Hola desde el padre";
+  String dato = "Hola soy el Padre";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('App con envío de datos'),
+        title: Text('Envío de Datos entre Padre e Hijo'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(dato),
-          HijoWidget(dato),
+          HijoWidget(
+            datoDesdePadre: dato,
+            actualizarDato: (nuevoDato) {
+              setState(() {
+                dato = nuevoDato;
+              });
+            },
+          ),
         ],
       ),
     );
@@ -40,14 +47,25 @@ class _PadreWidgetState extends State<PadreWidget> {
 
 class HijoWidget extends StatelessWidget {
   final String datoDesdePadre;
+  final Function(String) actualizarDato;
 
-  HijoWidget(this.datoDesdePadre);
+  HijoWidget({required this.datoDesdePadre, required this.actualizarDato});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20.0),
-      child: Text('Mensaje del hijo: $datoDesdePadre'),
+      child: Column(
+        children: [
+          Text('Mensaje del Hijo: $datoDesdePadre'),
+          ElevatedButton(
+            onPressed: () {
+              actualizarDato("Hola soy el hijo");
+            },
+            child: Text("Actualizar dato en el padre"),
+          ),
+        ],
+      ),
     );
   }
 }
